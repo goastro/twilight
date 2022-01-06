@@ -40,10 +40,10 @@ func AstronomicalTwilightLength(d time.Time, latitude, longitude float64) time.D
 	return lenToDuration(len)
 }
 
-func riseSetToTime(rise, set float64) (time.Time, time.Time) {
-	y, m, d := time.Now().Date()
+func riseSetToTime(now time.Time, rise, set float64) (time.Time, time.Time) {
+	y, m, d := now.Date()
 
-	today := time.Date(y, m, d, 0, 0, 0, 0, time.UTC)
+	today := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 
 	riseDuration := lenToDuration(rise)
 	setDuration := lenToDuration(set)
@@ -53,28 +53,28 @@ func riseSetToTime(rise, set float64) (time.Time, time.Time) {
 
 func SunRiseSet(date time.Time, latitude, longitude float64) (time.Time, time.Time, SunriseStatus) {
 	r, s, status := sunRiseSet(date.Year(), int(date.Month()), date.Day(), longitude, latitude, -35.0/60.0, true)
-	rise, set := riseSetToTime(r, s)
+	rise, set := riseSetToTime(date, r, s)
 
 	return rise, set, status
 }
 
 func CivilTwilight(date time.Time, latitude, longitude float64) (time.Time, time.Time, SunriseStatus) {
 	r, s, status := sunRiseSet(date.Year(), int(date.Month()), date.Day(), longitude, latitude, -6.0, true)
-	rise, set := riseSetToTime(r, s)
+	rise, set := riseSetToTime(date, r, s)
 
 	return rise, set, status
 }
 
 func NauticalTwilight(date time.Time, latitude, longitude float64) (time.Time, time.Time, SunriseStatus) {
 	r, s, status := sunRiseSet(date.Year(), int(date.Month()), date.Day(), longitude, latitude, -12.0, true)
-	rise, set := riseSetToTime(r, s)
+	rise, set := riseSetToTime(date, r, s)
 
 	return rise, set, status
 }
 
 func AstronomicalTwilight(date time.Time, latitude, longitude float64) (time.Time, time.Time, SunriseStatus) {
 	r, s, status := sunRiseSet(date.Year(), int(date.Month()), date.Day(), longitude, latitude, -18.0, true)
-	rise, set := riseSetToTime(r, s)
+	rise, set := riseSetToTime(date, r, s)
 
 	return rise, set, status
 }
